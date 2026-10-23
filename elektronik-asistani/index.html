@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elektronik Komponent Asistanı</title>
+    <meta name="description" content="Direnç renk kodu, SMD kapasitör çevirici, IC datasheet kütüphanesi ve mühendislik hesaplayıcıları.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="credit">design by mamixtalha</div>
+
+    <div class="app-shell">
+        <header class="app-header">
+            <h1 class="app-title">Elektronik Asistanı</h1>
+        </header>
+
+        <main class="content-area">
+
+            <!-- ═══════ SAYFA 1: HIZLI ARAÇLAR ═══════ -->
+            <section class="page active" id="page-tools">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-view="v-resistor">Direnç</button>
+                    <button class="sub-tab" data-view="v-smd">Kapasitör</button>
+                    <button class="sub-tab" data-view="v-datasheet">Datasheet</button>
+                    <button class="sub-tab" data-view="v-ohm">Ohm</button>
+                </div>
+
+                <!-- DİRENÇ -->
+                <div class="view active" id="v-resistor">
+                    <div class="card">
+                        <div class="resistor-visual">
+                            <div class="resistor-body">
+                                <div class="band" id="vis-band-1"></div>
+                                <div class="band" id="vis-band-2"></div>
+                                <div class="band" id="vis-band-3"></div>
+                                <div class="band" id="vis-band-4"></div>
+                            </div>
+                        </div>
+                        <div class="input-group"><label for="band-1">1. Bant (İlk Rakam)</label>
+                            <select id="band-1">
+                                <option value="0" data-color="black">Siyah (0)</option><option value="1" data-color="brown" selected>Kahverengi (1)</option>
+                                <option value="2" data-color="red">Kırmızı (2)</option><option value="3" data-color="orange">Turuncu (3)</option>
+                                <option value="4" data-color="yellow">Sarı (4)</option><option value="5" data-color="green">Yeşil (5)</option>
+                                <option value="6" data-color="blue">Mavi (6)</option><option value="7" data-color="violet">Mor (7)</option>
+                                <option value="8" data-color="gray">Gri (8)</option><option value="9" data-color="white">Beyaz (9)</option>
+                            </select>
+                        </div>
+                        <div class="input-group"><label for="band-2">2. Bant (İkinci Rakam)</label>
+                            <select id="band-2">
+                                <option value="0" data-color="black" selected>Siyah (0)</option><option value="1" data-color="brown">Kahverengi (1)</option>
+                                <option value="2" data-color="red">Kırmızı (2)</option><option value="3" data-color="orange">Turuncu (3)</option>
+                                <option value="4" data-color="yellow">Sarı (4)</option><option value="5" data-color="green">Yeşil (5)</option>
+                                <option value="6" data-color="blue">Mavi (6)</option><option value="7" data-color="violet">Mor (7)</option>
+                                <option value="8" data-color="gray">Gri (8)</option><option value="9" data-color="white">Beyaz (9)</option>
+                            </select>
+                        </div>
+                        <div class="input-group"><label for="band-3">3. Bant (Çarpan)</label>
+                            <select id="band-3">
+                                <option value="1" data-color="black">Siyah (×1 Ω)</option><option value="10" data-color="brown">Kahverengi (×10 Ω)</option>
+                                <option value="100" data-color="red" selected>Kırmızı (×100 Ω)</option><option value="1000" data-color="orange">Turuncu (×1 kΩ)</option>
+                                <option value="10000" data-color="yellow">Sarı (×10 kΩ)</option><option value="100000" data-color="green">Yeşil (×100 kΩ)</option>
+                                <option value="1000000" data-color="blue">Mavi (×1 MΩ)</option><option value="0.1" data-color="gold">Altın (×0.1 Ω)</option>
+                                <option value="0.01" data-color="silver">Gümüş (×0.01 Ω)</option>
+                            </select>
+                        </div>
+                        <div class="input-group"><label for="band-4">4. Bant (Tolerans)</label>
+                            <select id="band-4">
+                                <option value="1" data-color="brown">Kahverengi (±1%)</option><option value="2" data-color="red">Kırmızı (±2%)</option>
+                                <option value="5" data-color="gold" selected>Altın (±5%)</option><option value="10" data-color="silver">Gümüş (±10%)</option>
+                            </select>
+                        </div>
+                        <button class="btn-calc" id="calculate-btn">Hesapla</button>
+                        <div class="result-box show">
+                            <div class="reverse-row"><input type="number" id="reverse-val" step="any" placeholder="Değer girin...">
+                                <select id="reverse-unit"><option value="1">Ω</option><option value="1000">kΩ</option><option value="1000000">MΩ</option></select>
+                            </div>
+                            <div class="result-sub" id="result-tolerance">Tolerans: ±5%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KAPASİTÖR -->
+                <div class="view" id="v-smd">
+                    <div class="card">
+                        <div class="visual-illust cap-illust">
+                            <div class="cap-body"><div class="cap-stripe"></div><span class="cap-code" id="cap-vis-code">104</span></div>
+                            <div class="cap-lead left"></div><div class="cap-lead right"></div>
+                        </div>
+                        <div class="input-group"><label for="smd-code">Kapasitör / SMD Kodu (Örn: 104, 473)</label>
+                            <input type="text" id="smd-code" placeholder="104" maxlength="4">
+                        </div>
+                        <button class="btn-calc" id="calc-smd-btn">Çevir</button>
+                        <div class="result-box" id="smd-result-panel"><div class="result-val" id="smd-result-value">—</div></div>
+                    </div>
+                </div>
+
+                <!-- DATASHEET -->
+                <div class="view" id="v-datasheet">
+                    <div class="card">
+                        <div class="input-group"><label for="ic-selector">Entegre / Komponent Seçin</label>
+                            <select id="ic-selector"><option value="" disabled selected>— Bir komponent seçin —</option></select>
+                        </div>
+                        <div id="ds-output">
+                            <div class="ic-display" id="ic-display"><div class="ic-body" id="ic-body"><div class="ic-notch"></div></div></div>
+                            <div class="ds-info"><h3 id="ds-name">Komponent Seçin</h3><p id="ds-desc">Pinout ve teknik bilgiler burada görünecek.</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OHM -->
+                <div class="view" id="v-ohm">
+                    <div class="card">
+                        <div class="visual-illust ohm-wheel">
+                            <div class="wheel-ring"><span class="wq wq-v">V</span><span class="wq wq-i">I</span><span class="wq wq-r">R</span><span class="wq wq-p">P</span><div class="wheel-center">Ω</div></div>
+                        </div>
+                        <p class="hint-text">Herhangi 2 değer girin, diğerleri otomatik hesaplanır.</p>
+                        <div class="input-group"><label for="ohm-v">Gerilim — V (Volt)</label><input type="number" id="ohm-v" placeholder="12"></div>
+                        <div class="input-group"><label for="ohm-i">Akım — I (Amper)</label><input type="number" id="ohm-i" placeholder="0.5"></div>
+                        <div class="input-group"><label for="ohm-r">Direnç — R (Ohm)</label><input type="number" id="ohm-r" placeholder="24"></div>
+                        <div class="input-group"><label for="ohm-p">Güç — P (Watt)</label><input type="number" id="ohm-p" placeholder="6"></div>
+                        <button class="btn-calc" id="calc-ohm-btn">Hesapla / Temizle</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════ SAYFA 2: ANALİZ ═══════ -->
+            <section class="page" id="page-math">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-view="v-matrix">Matris</button>
+                    <button class="sub-tab" data-view="v-phasor">AC Fazör</button>
+                </div>
+
+                <div class="view active" id="v-matrix">
+                    <div class="card">
+                        <div class="visual-illust matrix-illust">
+                            <div class="mbracket left">[</div>
+                            <div class="mgrid-mini"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span><span>i</span></div>
+                            <div class="mbracket right">]</div><span class="mvar">X</span><span class="meq">=</span>
+                            <div class="mbracket left">[</div><div class="mgrid-mini col1"><span>b₁</span><span>b₂</span><span>b₃</span></div><div class="mbracket right">]</div>
+                        </div>
+                        <div class="input-group"><label for="matrix-size">Matris Boyutu</label>
+                            <select id="matrix-size"><option value="2">2×2</option><option value="3" selected>3×3</option><option value="4">4×4</option></select>
+                        </div>
+                        <p class="hint-text">Ax = B → Kramer kuralı ile çözüm</p>
+                        <div id="matrix-container"></div>
+                        <button class="btn-calc" id="calc-matrix-btn" style="margin-top:12px;">Çöz (Kramer)</button>
+                        <div class="result-box" id="matrix-result-panel"><div class="result-val" id="matrix-result-value">—</div></div>
+                    </div>
+                </div>
+
+                <div class="view" id="v-phasor">
+                    <div class="card">
+                        <div class="visual-illust phasor-illust"><canvas id="phasor-canvas" width="150" height="150"></canvas></div>
+                        <p class="hint-text">Rektangüler ↔ Polar dönüşüm</p>
+                        <div class="input-group"><label>Rektangüler: a + jb</label><div class="row2"><input type="number" id="phs-a" placeholder="a (reel)"><input type="number" id="phs-b" placeholder="b (imajiner)"></div></div>
+                        <button class="btn-calc" id="calc-rect-to-pol-btn">→ Polara Çevir</button>
+                        <div class="input-group" style="margin-top:14px;"><label>Polar: r ∠ θ°</label><div class="row2"><input type="number" id="phs-r" placeholder="r (büyüklük)"><input type="number" id="phs-th" placeholder="θ (derece)"></div></div>
+                        <button class="btn-calc" id="calc-pol-to-rect-btn">→ Rektangülere Çevir</button>
+                        <div class="result-box" id="phasor-result-panel"><div class="result-val" id="phasor-result-value">—</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════ SAYFA 3: ELEKTRONİK LAB ═══════ -->
+            <section class="page" id="page-lab">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-view="v-bjt">BJT</button>
+                    <button class="sub-tab" data-view="v-jfet">JFET</button>
+                    <button class="sub-tab" data-view="v-mosfet">MOSFET</button>
+                    <button class="sub-tab" data-view="v-opamp">Op-Amp</button>
+                </div>
+
+                <!-- BJT -->
+                <div class="view active" id="v-bjt">
+                    <div class="card">
+                        <div class="visual-illust bjt-schem">
+                            <svg viewBox="0 0 160 140" class="bjt-svg">
+                                <line x1="20" y1="70" x2="60" y2="70" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="60" y1="35" x2="60" y2="105" stroke="#00f3ff" stroke-width="2.5"/>
+                                <line x1="60" y1="50" x2="100" y2="20" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="60" y1="90" x2="100" y2="120" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="100" y1="20" x2="100" y2="5" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="100" y1="120" x2="100" y2="135" stroke="#00f3ff" stroke-width="2"/>
+                                <polygon points="90,112 100,120 92,105" fill="#00f3ff"/>
+                                <circle cx="70" cy="70" r="30" fill="none" stroke="rgba(0,243,255,0.2)" stroke-width="1"/>
+                                <text x="6" y="74" fill="#8a8a9a" font-size="11" font-family="Outfit">B</text>
+                                <text x="105" y="12" fill="#8a8a9a" font-size="11" font-family="Outfit">C</text>
+                                <text x="105" y="134" fill="#8a8a9a" font-size="11" font-family="Outfit">E</text>
+                            </svg>
+                        </div>
+                        <p class="hint-text">NPN Fixed Bias — Sabit Polarma Analizi</p>
+                        <div class="input-group"><label for="bjt-model">Model Seçiniz (opsiyonel)</label>
+                            <select id="bjt-model"><option value="">— Manuel Giriş —</option></select>
+                        </div>
+                        <div class="input-group"><label for="bjt-vcc">Vcc (Volt)</label><input type="number" id="bjt-vcc" placeholder="12"></div>
+                        <div class="input-group"><label for="bjt-rb">Rb (Ohm)</label><input type="number" id="bjt-rb" placeholder="470000"></div>
+                        <div class="input-group"><label for="bjt-rc">Rc (Ohm)</label><input type="number" id="bjt-rc" placeholder="2200"></div>
+                        <div class="input-group"><label for="bjt-beta">β (hFE)</label><input type="number" id="bjt-beta" placeholder="100"></div>
+                        <button class="btn-calc" id="calc-bjt-btn">Analiz Et</button>
+                        <div class="result-box" id="bjt-result-panel"><div class="result-val" id="bjt-result-value">—</div></div>
+                    </div>
+                </div>
+
+                <!-- JFET -->
+                <div class="view" id="v-jfet">
+                    <div class="card">
+                        <div class="visual-illust jfet-schem">
+                            <svg viewBox="0 0 160 140" class="bjt-svg">
+                                <line x1="20" y1="70" x2="55" y2="70" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="55" y1="30" x2="55" y2="110" stroke="#00f3ff" stroke-width="2.5"/>
+                                <line x1="55" y1="40" x2="100" y2="40" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="100" y1="40" x2="100" y2="10" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="55" y1="100" x2="100" y2="100" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="100" y1="100" x2="100" y2="130" stroke="#00f3ff" stroke-width="2"/>
+                                <polygon points="30,66 20,70 30,74" fill="#00f3ff"/>
+                                <circle cx="72" cy="70" r="28" fill="none" stroke="rgba(0,243,255,0.2)" stroke-width="1"/>
+                                <text x="4" y="66" fill="#8a8a9a" font-size="10" font-family="Outfit">G</text>
+                                <text x="105" y="15" fill="#8a8a9a" font-size="10" font-family="Outfit">D</text>
+                                <text x="105" y="128" fill="#8a8a9a" font-size="10" font-family="Outfit">S</text>
+                            </svg>
+                        </div>
+                        <p class="hint-text">JFET — Shockley: Id = Idss(1 − Vgs/Vp)²</p>
+                        <div class="input-group"><label for="jfet-idss">Idss (mA)</label><input type="number" id="jfet-idss" placeholder="10"></div>
+                        <div class="input-group"><label for="jfet-vp">Vp — Pinch-off (V)</label><input type="number" id="jfet-vp" placeholder="-4"></div>
+                        <div class="input-group"><label for="jfet-vgs">Vgs (V)</label><input type="number" id="jfet-vgs" placeholder="-2"></div>
+                        <button class="btn-calc" id="calc-jfet-btn">Id Hesapla</button>
+                        <div class="result-box" id="jfet-result-panel"><div class="result-val" id="jfet-result-value">—</div></div>
+                    </div>
+                </div>
+
+                <!-- MOSFET -->
+                <div class="view" id="v-mosfet">
+                    <div class="card">
+                        <div class="visual-illust mosfet-schem">
+                            <svg viewBox="0 0 160 140" class="bjt-svg">
+                                <line x1="20" y1="70" x2="48" y2="70" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="55" y1="30" x2="55" y2="110" stroke="#00f3ff" stroke-width="2.5"/>
+                                <line x1="48" y1="50" x2="48" y2="90" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                <line x1="55" y1="40" x2="100" y2="40" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="100" y1="40" x2="100" y2="10" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="55" y1="100" x2="100" y2="100" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="100" y1="100" x2="100" y2="130" stroke="#00f3ff" stroke-width="2"/>
+                                <polygon points="90,88 100,100 85,95" fill="#00f3ff"/>
+                                <circle cx="72" cy="70" r="28" fill="none" stroke="rgba(0,243,255,0.2)" stroke-width="1"/>
+                                <text x="4" y="66" fill="#8a8a9a" font-size="10" font-family="Outfit">G</text>
+                                <text x="105" y="15" fill="#8a8a9a" font-size="10" font-family="Outfit">D</text>
+                                <text x="105" y="128" fill="#8a8a9a" font-size="10" font-family="Outfit">S</text>
+                            </svg>
+                        </div>
+                        <p class="hint-text">MOSFET Doyum: Id = k(Vgs − Vth)²</p>
+                        <div class="input-group"><label for="mos-k">k (mA/V²)</label><input type="number" id="mos-k" placeholder="0.5"></div>
+                        <div class="input-group"><label for="mos-vth">Vth — Eşik (V)</label><input type="number" id="mos-vth" placeholder="2"></div>
+                        <div class="input-group"><label for="mos-vgs">Vgs (V)</label><input type="number" id="mos-vgs" placeholder="5"></div>
+                        <div class="input-group"><label for="mos-vds">Vds (V) — opsiyonel</label><input type="number" id="mos-vds" placeholder="10"></div>
+                        <button class="btn-calc" id="calc-mosfet-btn">Id Hesapla</button>
+                        <div class="result-box" id="mosfet-result-panel"><div class="result-val" id="mosfet-result-value">—</div></div>
+                    </div>
+                </div>
+
+                <!-- OP-AMP -->
+                <div class="view" id="v-opamp">
+                    <div class="card">
+                        <div class="visual-illust opamp-schem">
+                            <svg viewBox="0 0 160 120" class="opamp-svg">
+                                <polygon points="30,10 30,110 140,60" fill="none" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="5" y1="40" x2="30" y2="40" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="5" y1="80" x2="30" y2="80" stroke="#00f3ff" stroke-width="2"/>
+                                <line x1="140" y1="60" x2="155" y2="60" stroke="#00f3ff" stroke-width="2"/>
+                                <text x="14" y="37" fill="#ff6b6b" font-size="14" font-family="Outfit">−</text>
+                                <text x="14" y="84" fill="#00ff88" font-size="14" font-family="Outfit">+</text>
+                                <text x="55" y="65" fill="rgba(255,255,255,0.3)" font-size="20" font-family="Outfit">A</text>
+                            </svg>
+                        </div>
+                        <div class="input-group"><label for="opamp-type">Konfigürasyon</label>
+                            <select id="opamp-type"><option value="inverting">Eviren (Inverting)</option><option value="non-inverting">Evirmeyen (Non-Inverting)</option></select>
+                        </div>
+                        <div class="input-group"><label for="opamp-r1">R1 (Ohm)</label><input type="number" id="opamp-r1" placeholder="1000"></div>
+                        <div class="input-group"><label for="opamp-rf">Rf (Ohm)</label><input type="number" id="opamp-rf" placeholder="10000"></div>
+                        <button class="btn-calc" id="calc-opamp-btn">Kazancı Hesapla</button>
+                        <div class="result-box" id="opamp-result-panel"><div class="result-val" id="opamp-result-value">—</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════ SAYFA 4: SAYISAL TASARIM ═══════ -->
+            <section class="page" id="page-digital">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-view="v-logic">Lojik Kapılar</button>
+                    <button class="sub-tab" data-view="v-kmap">K-Map</button>
+                </div>
+
+                <div class="view active" id="v-logic">
+                    <div class="card">
+                        <div class="input-group"><label for="gate-select">Kapı Türü Seçin</label>
+                            <select id="gate-select">
+                                <option value="AND">AND</option><option value="OR">OR</option><option value="NOT">NOT</option>
+                                <option value="NAND">NAND</option><option value="NOR">NOR</option><option value="XOR">XOR</option>
+                            </select>
+                        </div>
+                        <div id="gate-symbol" class="gate-symbol-area"></div>
+                        <div id="truth-table-container"></div>
+                    </div>
+                </div>
+
+                <!-- KARNAUGH HARİTASI -->
+                <div class="view" id="v-kmap">
+                    <div class="card">
+                        <div class="input-group"><label for="kmap-vars">Değişken Sayısı</label>
+                            <select id="kmap-vars">
+                                <option value="2">2 Değişken (A, B)</option>
+                                <option value="3">3 Değişken (A, B, C)</option>
+                                <option value="4" selected>4 Değişken (A, B, C, D)</option>
+                            </select>
+                        </div>
+                        <p class="hint-text">Hücrelere tıklayarak 0 → 1 → X (Don't Care) arasında geçiş yapın.</p>
+                        <div id="kmap-grid-area"></div>
+                        <div class="kmap-actions">
+                            <button class="btn-calc" id="kmap-solve-btn">Sadeleştir (SOP)</button>
+                            <button class="btn-calc kmap-clear-btn" id="kmap-clear-btn">Temizle</button>
+                        </div>
+                        <div class="result-box" id="kmap-result-panel"><div class="result-val" id="kmap-result-value">—</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════ SAYFA 5: SİSTEM & GÜÇ ═══════ -->
+            <section class="page" id="page-power">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-view="v-motor">Motor</button>
+                    <button class="sub-tab" data-view="v-buck">Buck</button>
+                    <button class="sub-tab" data-view="v-awg">AWG Kablo</button>
+                    <button class="sub-tab" data-view="v-dctork">Tork</button>
+                    <button class="sub-tab" data-view="v-emachine">Makine</button>
+                </div>
+
+                <div class="view active" id="v-motor">
+                    <div class="card">
+                        <div class="visual-illust motor-illust">
+                            <div class="stator-ring"><div class="rotor-disc" id="motor-rotor"><div class="rotor-bar"></div><div class="rotor-bar b2"></div></div></div>
+                            <div class="motor-labels"><span class="motor-ns" id="motor-ns-label">Ns = ?</span><span class="motor-slip" id="motor-slip-label">s = ?</span></div>
+                        </div>
+                        <p class="hint-text">Senkron hız ve kayma hesabı</p>
+                        <div class="input-group"><label for="motor-f">Frekans (Hz)</label><input type="number" id="motor-f" placeholder="50"></div>
+                        <div class="input-group"><label for="motor-p">Kutup Sayısı (P)</label><input type="number" id="motor-p" placeholder="4"></div>
+                        <div class="input-group"><label for="motor-nr">Rotor Hızı (RPM)</label><input type="number" id="motor-nr" placeholder="1450"></div>
+                        <button class="btn-calc" id="calc-motor-btn">Hesapla</button>
+                        <div class="result-box" id="motor-result-panel"><div class="result-val" id="motor-result-value">—</div></div>
+                    </div>
+                </div>
+
+                <div class="view" id="v-buck">
+                    <div class="card">
+                        <div class="visual-illust buck-illust">
+                            <svg viewBox="0 0 180 80" class="buck-svg">
+                                <rect x="5" y="25" width="25" height="30" rx="3" fill="none" stroke="#00f3ff" stroke-width="1.5"/>
+                                <text x="10" y="44" fill="#00f3ff" font-size="9" font-family="Outfit">SW</text>
+                                <line x1="30" y1="40" x2="50" y2="40" stroke="#00f3ff" stroke-width="1.5"/>
+                                <ellipse cx="65" cy="40" rx="15" ry="12" fill="none" stroke="#ff6b6b" stroke-width="1.5"/>
+                                <text x="58" y="44" fill="#ff6b6b" font-size="9" font-family="Outfit">L</text>
+                                <line x1="80" y1="40" x2="100" y2="40" stroke="#00f3ff" stroke-width="1.5"/>
+                                <line x1="100" y1="25" x2="100" y2="55" stroke="#00ff88" stroke-width="1.5"/>
+                                <line x1="105" y1="28" x2="105" y2="52" stroke="#00ff88" stroke-width="1.5"/>
+                                <line x1="105" y1="40" x2="130" y2="40" stroke="#00f3ff" stroke-width="1.5"/>
+                                <text x="120" y="35" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Outfit">Vout</text>
+                                <text x="2" y="18" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Outfit">Vin</text>
+                            </svg>
+                        </div>
+                        <p class="hint-text">Minimum indüktör değeri hesabı</p>
+                        <div class="input-group"><label for="buck-vin">Vin (V)</label><input type="number" id="buck-vin" placeholder="12"></div>
+                        <div class="input-group"><label for="buck-vout">Vout (V)</label><input type="number" id="buck-vout" placeholder="5"></div>
+                        <div class="input-group"><label for="buck-f">Frekans (Hz)</label><input type="number" id="buck-f" placeholder="100000"></div>
+                        <div class="input-group"><label for="buck-dil">ΔIL (A)</label><input type="number" id="buck-dil" placeholder="0.3"></div>
+                        <button class="btn-calc" id="calc-buck-btn">Lmin Hesapla</button>
+                        <div class="result-box" id="buck-result-panel"><div class="result-val" id="buck-result-value">—</div></div>
+                    </div>
+                </div>
+
+                <!-- AWG -->
+                <div class="view" id="v-awg">
+                    <div class="card">
+                        <p class="hint-text">Akım değeri girip uygun kablo kesitini bulun.</p>
+                        <div class="input-group"><label for="awg-current">Taşınacak Akım (Amper)</label><input type="number" id="awg-current" placeholder="15"></div>
+                        <button class="btn-calc" id="calc-awg-btn">Uygun Kabloyu Bul</button>
+                        <div class="result-box" id="awg-result-panel"><div class="result-val" id="awg-result-value">—</div></div>
+                        <div class="awg-ref-table" id="awg-table"></div>
+                    </div>
+                </div>
+
+                <!-- ELEKTRİK MAKİNELERİ TEMELLERİ -->
+                <div class="view" id="v-emachine">
+                    <div class="card">
+                        <div class="em-mode-switch">
+                            <button class="em-mode-btn em-mode-active" id="em-motor-mode">⚡ Motor Modu</button>
+                            <button class="em-mode-btn" id="em-gen-mode">🔄 Jeneratör Modu</button>
+                        </div>
+                        <p class="em-subtitle" id="em-subtitle">Elektrik enerjisi → Mekanik enerji</p>
+
+                        <div class="em-diagram-wrap">
+                            <svg viewBox="0 0 300 300" class="em-diagram-svg" id="em-svg">
+                                <!-- Stator (dış halka) -->
+                                <circle cx="150" cy="150" r="130" fill="none" stroke="#00f3ff" stroke-width="3" class="em-part" data-part="stator"/>
+                                <circle cx="150" cy="150" r="125" fill="none" stroke="rgba(0,243,255,0.08)" stroke-width="8"/>
+                                <!-- Stator sargıları -->
+                                <rect x="18" y="130" width="14" height="40" rx="3" fill="rgba(255,107,107,0.3)" stroke="#ff6b6b" stroke-width="1" class="em-part" data-part="stator"/>
+                                <rect x="268" y="130" width="14" height="40" rx="3" fill="rgba(255,107,107,0.3)" stroke="#ff6b6b" stroke-width="1" class="em-part" data-part="stator"/>
+
+                                <!-- Rotor (iç disk) -->
+                                <circle cx="150" cy="150" r="70" fill="rgba(0,255,136,0.04)" stroke="#00ff88" stroke-width="2" class="em-part" data-part="rotor"/>
+                                <!-- Rotor sargıları (Endüvi/Armatür) -->
+                                <rect x="90" y="135" width="120" height="30" rx="4" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1.5" class="em-part" data-part="enduvi"/>
+                                <line x1="100" y1="150" x2="200" y2="150" stroke="#a78bfa" stroke-width="1" stroke-dasharray="4,3"/>
+                                <!-- Mil -->
+                                <circle cx="150" cy="150" r="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" class="em-part" data-part="rotor"/>
+                                <circle cx="150" cy="150" r="3" fill="rgba(255,255,255,0.3)"/>
+
+                                <!-- Komütatör -->
+                                <path d="M150,225 L140,245 L160,245 Z" fill="rgba(252,202,70,0.2)" stroke="#fcca46" stroke-width="1.5" class="em-part" data-part="komutator"/>
+                                <rect x="138" y="245" width="24" height="8" rx="2" fill="rgba(252,202,70,0.15)" stroke="#fcca46" stroke-width="1" class="em-part" data-part="komutator"/>
+
+                                <!-- Fırçalar -->
+                                <rect x="125" y="255" width="10" height="16" rx="2" fill="rgba(255,165,0,0.25)" stroke="#ffa500" stroke-width="1.5" class="em-part" data-part="firca"/>
+                                <rect x="165" y="255" width="10" height="16" rx="2" fill="rgba(255,165,0,0.25)" stroke="#ffa500" stroke-width="1.5" class="em-part" data-part="firca"/>
+
+                                <!-- Enerji akış okları (Motor modu) -->
+                                <g id="em-flow-arrows">
+                                    <polygon points="5,145 15,150 5,155" fill="#00f3ff" opacity="0.7"/>
+                                    <text x="2" y="140" fill="#00f3ff" font-size="8" font-family="Outfit">Elektrik</text>
+                                    <polygon points="215,150 225,145 225,155" fill="#00ff88" opacity="0.7"/>
+                                    <line x1="220" y1="150" x2="290" y2="150" stroke="#00ff88" stroke-width="1.5" stroke-dasharray="5,3"/>
+                                    <text x="255" y="140" fill="#00ff88" font-size="8" font-family="Outfit">Hareket</text>
+                                </g>
+
+                                <!-- Etiketler -->
+                                <text x="150" y="30" text-anchor="middle" fill="rgba(0,243,255,0.4)" font-size="10" font-family="Outfit">STATOR</text>
+                                <text x="150" y="155" text-anchor="middle" fill="rgba(0,255,136,0.4)" font-size="9" font-family="Outfit">ROTOR</text>
+                            </svg>
+                        </div>
+
+                        <p class="hint-text" style="text-align:center;margin-top:8px">Parçalara tıklayarak bilgi edinin</p>
+                        <div class="em-info-card" id="em-info-card">
+                            <h4 class="em-info-title" id="em-info-title">Bir parça seçin</h4>
+                            <p class="em-info-text" id="em-info-text">Yukarıdaki şemada herhangi bir parçaya dokunarak teknik açıklamasını görün.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DC MOTOR TORK & GÜÇ -->
+                <div class="view" id="v-dctork">
+                    <div class="card">
+                        <div class="visual-illust" style="text-align:center">
+                            <svg viewBox="0 0 180 80" style="width:160px;height:auto">
+                                <rect x="10" y="15" width="60" height="50" rx="6" fill="none" stroke="#00f3ff" stroke-width="2"/>
+                                <text x="25" y="45" fill="#00f3ff" font-size="10" font-family="Outfit">DC</text>
+                                <line x1="70" y1="40" x2="110" y2="40" stroke="#a78bfa" stroke-width="3"/>
+                                <circle cx="110" cy="40" r="4" fill="#a78bfa"/>
+                                <path d="M120,25 A18,18 0 0,1 138,40" fill="none" stroke="#00ff88" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                <polygon points="137,36 142,40 137,44" fill="#00ff88"/>
+                                <text x="125" y="20" fill="#00ff88" font-size="8" font-family="Outfit">Tork</text>
+                                <text x="2" y="12" fill="var(--t2)" font-size="7" font-family="Outfit">V, I →</text>
+                                <text x="108" y="60" fill="var(--t2)" font-size="7" font-family="Outfit">→ RPM</text>
+                            </svg>
+                        </div>
+                        <p class="hint-text">DC Motor — Mil Torku ve Mekanik Güç Hesabı</p>
+                        <div class="input-group"><label for="dct-v">Armatür Voltajı — V (Volt)</label><input type="number" id="dct-v" placeholder="24"></div>
+                        <div class="input-group"><label for="dct-i">Armatür Akımı — I (Amper)</label><input type="number" id="dct-i" placeholder="5"></div>
+                        <div class="input-group"><label for="dct-rpm">Motor Devri — n (RPM)</label><input type="number" id="dct-rpm" placeholder="3000"></div>
+                        <div class="input-group"><label for="dct-eff">Verim — η (%)</label><input type="number" id="dct-eff" placeholder="85" min="1" max="100"></div>
+                        <button class="btn-calc" id="calc-dctork-btn">Hesapla</button>
+                        <div class="result-box" id="dctork-result-panel"><div class="result-val" id="dctork-result-value">—</div></div>
+                        <div style="margin-top:12px;padding:10px;background:rgba(255,255,255,.03);border-radius:10px;font-size:.7rem;color:var(--t2);line-height:1.7">
+                            <b style="color:var(--primary)">Formüller:</b><br>
+                            P<sub>giriş</sub> = V × I<br>
+                            P<sub>mek</sub> = V × I × η<br>
+                            T = (P<sub>mek</sub> × 60) / (2π × n)<br>
+                            1 HP = 746 W
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- BOTTOM NAV -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-page="page-tools"><span class="nav-icon">🛠️</span><span class="nav-label">Araçlar</span></button>
+            <button class="nav-btn" data-page="page-math"><span class="nav-icon">🧮</span><span class="nav-label">Analiz</span></button>
+            <button class="nav-btn" data-page="page-lab"><span class="nav-icon">⚡</span><span class="nav-label">Lab</span></button>
+            <button class="nav-btn" data-page="page-digital"><span class="nav-icon">💡</span><span class="nav-label">Sayısal</span></button>
+            <button class="nav-btn" data-page="page-power"><span class="nav-icon">🔋</span><span class="nav-label">Güç</span></button>
+        </nav>
+    </div>
+
+    <script src="bg-animation.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
