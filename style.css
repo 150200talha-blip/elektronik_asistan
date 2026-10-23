@@ -1,0 +1,262 @@
+/* ===== TOKENS ===== */
+:root {
+    --primary: #00f3ff;
+    --primary-glow: rgba(0,243,255,0.35);
+    --bg: #0a0a12;
+    --panel: rgba(14,14,24,0.88);
+    --border: rgba(255,255,255,0.07);
+    --t1: #eaeaea;
+    --t2: #7e7e92;
+    --danger: #ff6b6b;
+    --success: #00ff88;
+    --radius: 16px;
+    --font: 'Outfit', -apple-system, sans-serif;
+    --mono: 'Orbitron', monospace;
+    --rc-black:#1a1a1a;--rc-brown:#8B4513;--rc-red:#e63946;--rc-orange:#f77f00;
+    --rc-yellow:#fcca46;--rc-green:#2d6a4f;--rc-blue:#2563eb;--rc-violet:#7b2d8b;
+    --rc-gray:#6b7280;--rc-white:#f0f0f0;--rc-gold:#d4a017;--rc-silver:#a8a8a8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+
+body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--t1);
+    background-image: linear-gradient(rgba(10,10,18,0.7),rgba(10,10,18,0.8)),url('bg.png');
+    background-size: cover; background-position: center; background-attachment: fixed;
+    overflow: hidden; height: 100vh; height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeSpeed;
+}
+
+#bg-canvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:.5}
+
+/* ===== CREDIT (SAĞ ÜST KÖŞE) ===== */
+.credit{
+    position:fixed;top:10px;right:14px;z-index:9999;
+    font-size:.55rem;color:rgba(255,255,255,.18);letter-spacing:.8px;font-weight:400;
+    pointer-events:none;
+}
+
+/* ===== APP SHELL ===== */
+.app-shell{position:relative;z-index:10;display:flex;flex-direction:column;height:100vh;height:100dvh}
+.app-header{padding:14px 16px 8px;text-align:center;flex-shrink:0}
+.app-title{font-family:var(--mono);font-size:clamp(.9rem,3.5vw,1.5rem);font-weight:800;
+    background:linear-gradient(135deg,var(--primary),#7b5ea7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;letter-spacing:2px}
+
+/* ===== CONTENT ===== */
+.content-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 12px 12px;
+    -webkit-overflow-scrolling:touch;will-change:scroll-position;transform:translateZ(0)}
+
+.page{display:none}
+.page.active{display:block}
+
+/* ===== SUB-TABS (pill şeklinde) ===== */
+.sub-tabs{display:flex;gap:8px;padding:6px 0 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sub-tabs::-webkit-scrollbar{display:none}
+.sub-tab{flex-shrink:0;padding:9px 16px;border-radius:20px;border:1px solid var(--border);
+    background:rgba(255,255,255,0.03);color:var(--t2);font-family:var(--font);font-size:.8rem;font-weight:500;
+    cursor:pointer;transition:.2s;white-space:nowrap}
+.sub-tab.active{background:var(--primary);color:#000;font-weight:700;border-color:var(--primary);
+    box-shadow:0 0 14px var(--primary-glow)}
+
+.view{display:none}
+.view.active{display:block}
+
+/* ===== CARD ===== */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:20px;
+    box-shadow:0 4px 16px rgba(0,0,0,.4);margin-bottom:16px;transform:translateZ(0)}
+
+/* ===== FORM ===== */
+.input-group{margin-bottom:14px}
+.input-group label{display:block;font-size:.78rem;color:var(--t2);margin-bottom:5px;font-weight:500}
+input,select{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+    color:var(--t1);padding:13px 14px;border-radius:10px;font-family:var(--font);font-size:1rem;outline:none;
+    transition:border .25s,box-shadow .25s;-webkit-appearance:none;appearance:none}
+input:focus,select:focus{border-color:var(--primary)}
+input::placeholder{color:rgba(255,255,255,.18)}
+select option{background:#1a1a2e;color:#eee}
+.row2{display:flex;gap:8px}
+.row2 input{flex:1}
+.hint-text{font-size:.76rem;color:var(--t2);margin-bottom:12px}
+
+/* ===== BUTTONS ===== */
+.btn-calc{width:100%;padding:14px;background:linear-gradient(135deg,#00c8d6,#0090ff);border:none;border-radius:12px;
+    color:#000;font-family:var(--font);font-size:.92rem;font-weight:700;cursor:pointer;text-transform:uppercase;
+    letter-spacing:.5px;transition:transform .1s,box-shadow .25s;margin-top:4px}
+.btn-calc:active{transform:scale(.97)}
+
+/* ===== RESULT ===== */
+.result-box{margin-top:16px;padding:14px;background:rgba(0,243,255,.04);border:1px solid rgba(0,243,255,.12);
+    border-radius:12px;text-align:center;display:none}
+.result-box.show{display:block}
+.result-val{color:var(--primary);font-weight:700;font-size:1rem;line-height:1.6}
+.result-sub{font-size:.8rem;color:var(--t2);margin-top:6px}
+.reverse-row{display:flex;gap:8px;margin-bottom:6px}
+.reverse-row input{flex:2}
+.reverse-row select{flex:1}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{
+    flex-shrink:0;display:flex;justify-content:space-around;align-items:center;
+    background:rgba(10,10,18,.97);
+    border-top:1px solid var(--border);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+    position:sticky;bottom:0;left:0;right:0;z-index:100;
+    transform:translateZ(0);
+}
+.nav-btn{background:none;border:none;color:var(--t2);display:flex;flex-direction:column;
+    align-items:center;gap:2px;cursor:pointer;padding:5px 6px;transition:color .2s;-webkit-tap-highlight-color:transparent;
+    min-width:0;flex:1}
+.nav-btn.active{color:var(--primary)}
+.nav-btn.active .nav-icon{transform:scale(1.12)}
+.nav-icon{font-size:1.25rem;transition:transform .2s}
+.nav-label{font-size:.58rem;font-weight:600;letter-spacing:.2px;white-space:nowrap}
+
+/* ===== RESISTOR ===== */
+.resistor-visual{display:flex;justify-content:center;align-items:center;padding:16px 0;margin-bottom:14px;
+    background:rgba(255,255,255,.03);border-radius:12px}
+.resistor-body{width:180px;height:38px;background:linear-gradient(180deg,#e8d5b0,#c4a97a);border-radius:20px;
+    position:relative;display:flex;justify-content:space-evenly;align-items:stretch;padding:0 22px;
+    box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.resistor-body::before,.resistor-body::after{content:'';position:absolute;top:50%;transform:translateY(-50%);width:22px;height:4px;background:#999;border-radius:2px}
+.resistor-body::before{left:-22px}
+.resistor-body::after{right:-22px}
+.band{width:10px;border-radius:2px}
+
+/* ===== CAPACITOR ===== */
+.cap-illust{display:flex;align-items:center;justify-content:center;gap:0;height:70px}
+.cap-body{width:60px;height:40px;background:linear-gradient(180deg,#3a3a5c,#2a2a4a);border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center;border:1px solid #555}
+.cap-stripe{position:absolute;left:0;top:0;width:8px;height:100%;background:var(--danger);border-radius:4px 0 0 4px}
+.cap-code{color:var(--t1);font-size:.75rem;font-weight:600;z-index:1}
+.cap-lead{width:18px;height:3px;background:#999}
+
+/* ===== OHM WHEEL ===== */
+.ohm-wheel{display:flex;justify-content:center;margin-bottom:8px}
+.wheel-ring{width:110px;height:110px;border:2px solid rgba(0,243,255,.25);border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.wheel-center{font-family:var(--mono);font-size:1.2rem;color:var(--primary);opacity:.5}
+.wq{position:absolute;font-family:var(--mono);font-size:.85rem;font-weight:700;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(0,243,255,.1);border:1px solid rgba(0,243,255,.2)}
+.wq-v{top:-14px;left:50%;transform:translateX(-50%);color:#ff6b6b}
+.wq-i{bottom:-14px;left:50%;transform:translateX(-50%);color:#00ff88}
+.wq-r{left:-14px;top:50%;transform:translateY(-50%);color:#fcca46}
+.wq-p{right:-14px;top:50%;transform:translateY(-50%);color:#a78bfa}
+
+/* ===== MATRIX ===== */
+.matrix-illust{display:flex;align-items:center;justify-content:center;gap:4px;padding:10px 0;font-size:.85rem;color:var(--t2)}
+.mbracket{font-size:2rem;font-weight:100;color:rgba(255,255,255,.3);line-height:1}
+.mgrid-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:2px 6px;font-size:.7rem;text-align:center}
+.mgrid-mini.col1{grid-template-columns:1fr;gap:2px}
+.mvar{font-family:var(--mono);color:var(--primary);font-size:.9rem;margin:0 4px}
+.meq{color:var(--t2);font-size:1rem;margin:0 4px}
+.matrix-grid{display:grid;gap:6px;align-items:center}
+.matrix-grid input{text-align:center;padding:10px 4px;font-size:.88rem}
+.meq-sign{text-align:center;color:var(--t2);font-weight:600;font-size:.9rem}
+
+/* ===== PHASOR ===== */
+.phasor-illust{display:flex;justify-content:center}
+.phasor-illust canvas{background:rgba(0,0,0,.2);border-radius:8px;border:1px solid var(--border)}
+
+/* ===== SCHEMATICS ===== */
+.bjt-schem,.jfet-schem,.mosfet-schem,.opamp-schem{display:flex;justify-content:center}
+.bjt-svg{width:140px;height:auto}
+.opamp-svg{width:140px;height:auto}
+.visual-illust{margin-bottom:14px;padding:10px 0}
+
+/* ===== MOTOR ===== */
+.motor-illust{display:flex;flex-direction:column;align-items:center;gap:8px}
+.stator-ring{width:90px;height:90px;border:3px solid var(--primary);border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,243,255,.15)}
+.rotor-disc{width:54px;height:54px;border:2px dashed rgba(0,243,255,.4);border-radius:50%;position:relative}
+.rotor-bar{position:absolute;top:50%;left:0;right:0;height:2px;background:var(--primary);transform:translateY(-50%)}
+.rotor-bar.b2{transform:translateY(-50%) rotate(90deg)}
+.motor-labels{display:flex;gap:16px;font-size:.72rem;color:var(--t2)}
+
+/* ===== BUCK ===== */
+.buck-illust{display:flex;justify-content:center}
+.buck-svg{width:180px;height:auto}
+
+/* ===== IC / DATASHEET ===== */
+.ic-display{display:flex;justify-content:center;margin:16px 0;overflow-x:auto}
+.ic-body{min-width:120px;background:linear-gradient(180deg,#2a2a2a,#1e1e1e);border-radius:6px;border:1px solid #444;position:relative;padding:14px 0;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.ic-notch{width:20px;height:10px;background:#111;border-radius:0 0 50% 50%;position:absolute;left:50%;top:0;transform:translateX(-50%)}
+.ic-pin-row{display:flex;flex-direction:column;gap:8px;position:absolute;top:18px}
+.ic-pin-row.left{left:-18px}
+.ic-pin-row.right{right:-18px}
+.ic-pin{width:18px;height:5px;background:linear-gradient(90deg,#aaa,#888);border-radius:1px;position:relative}
+.pin-label{position:absolute;font-size:.55rem;font-weight:500;color:var(--primary);white-space:nowrap;top:-3px}
+.ic-pin-row.left .pin-label{left:24px}
+.ic-pin-row.right .pin-label{right:24px}
+.ds-info{text-align:center}
+.ds-info h3{color:var(--primary);font-size:.95rem;margin-bottom:6px}
+.ds-info p,.ds-info div{color:var(--t2);font-size:.78rem;line-height:1.5}
+.pinout-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:.7rem;margin-top:10px;background:rgba(0,0,0,.2);padding:10px;border-radius:8px;text-align:left;color:var(--t2)}
+.pinout-grid b{color:var(--primary)}
+
+/* ===== DATASHEET SPEC TABLE ===== */
+.ds-spec-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.75rem}
+.ds-spec-table th{text-align:left;padding:7px 8px;background:rgba(0,243,255,.08);color:var(--primary);border-bottom:1px solid rgba(0,243,255,.15);font-weight:600}
+.ds-spec-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t1)}
+.ds-spec-table tr:last-child td{border-bottom:none}
+
+/* ===== LOGIC GATES ===== */
+.gate-symbol-area{display:flex;justify-content:center;margin:14px 0;min-height:80px}
+.gate-symbol-area svg{width:160px;height:auto}
+.truth-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.82rem;text-align:center}
+.truth-table th{padding:10px 8px;background:rgba(0,243,255,.1);color:var(--primary);border-bottom:1px solid rgba(0,243,255,.15);font-weight:700}
+.truth-table td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t1)}
+.truth-table td.out-1{color:var(--success);font-weight:700}
+.truth-table td.out-0{color:var(--danger);opacity:.6}
+
+/* ===== AWG TABLE ===== */
+.awg-ref-table{margin-top:16px;max-height:250px;overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--border)}
+.awg-ref-table table{width:100%;border-collapse:collapse;font-size:.72rem}
+.awg-ref-table th{position:sticky;top:0;padding:8px 6px;background:rgba(0,243,255,.1);color:var(--primary);font-weight:600;text-align:center;border-bottom:1px solid rgba(0,243,255,.15)}
+.awg-ref-table td{padding:7px 6px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03);color:var(--t2)}
+.awg-ref-table tr.highlight{background:rgba(0,243,255,.08)}
+.awg-ref-table tr.highlight td{color:var(--primary);font-weight:700}
+
+/* ===== KARNAUGH MAP ===== */
+.kmap-wrapper{display:inline-block;margin:0 auto}
+#kmap-grid-area{overflow-x:auto;-webkit-overflow-scrolling:touch;display:flex;justify-content:center;padding:4px 0}
+.kmap-table{border-collapse:collapse;margin:0 auto}
+.kmap-table th{padding:6px 4px;font-size:.65rem;font-weight:600;color:var(--t2);text-align:center;min-width:28px;white-space:nowrap}
+.kmap-table th.kmap-rc{color:var(--primary);font-size:.7rem;background:rgba(0,243,255,.06)}
+.kmap-table th.kmap-corner{background:none;position:relative}
+.kmap-table th.kmap-corner::after{content:'';position:absolute;left:4px;top:4px;right:4px;bottom:4px;
+    border-bottom:1px solid rgba(255,255,255,.15);transform:rotate(-35deg);transform-origin:center}
+.kmap-cell{width:44px;height:44px;text-align:center;vertical-align:middle;cursor:pointer;
+    font-family:var(--mono);font-size:1rem;font-weight:700;border:1px solid rgba(255,255,255,.08);
+    transition:background .15s;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.kmap-cell[data-val="0"]{color:rgba(255,255,255,.2);background:rgba(0,0,0,.15)}
+.kmap-cell[data-val="1"]{color:var(--success);background:rgba(0,255,136,.08)}
+.kmap-cell[data-val="X"]{color:#a78bfa;background:rgba(167,139,250,.08)}
+.kmap-cell:active{background:rgba(0,243,255,.12)}
+.kmap-cell .kmap-idx{display:block;font-size:.5rem;font-weight:400;color:rgba(255,255,255,.15);font-family:var(--font);line-height:1;margin-bottom:1px}
+.kmap-actions{display:flex;gap:8px;margin-top:12px}
+.kmap-actions .btn-calc{flex:1}
+.kmap-clear-btn{background:linear-gradient(135deg,#444,#666) !important;color:#eee !important}
+
+/* ===== ELEKTRİK MAKİNELERİ TEMELLERİ (em- prefix) ===== */
+.em-mode-switch{display:flex;gap:6px;margin-bottom:10px}
+.em-mode-btn{flex:1;padding:10px 8px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.03);
+    color:var(--t2);font-family:var(--font);font-size:.78rem;font-weight:500;cursor:pointer;transition:.2s}
+.em-mode-btn.em-mode-active{background:linear-gradient(135deg,#00c8d6,#0090ff);color:#000;font-weight:700;border-color:transparent}
+.em-subtitle{text-align:center;font-size:.72rem;color:var(--t2);margin-bottom:10px;transition:color .3s}
+
+.em-diagram-wrap{display:flex;justify-content:center;padding:4px 0}
+.em-diagram-svg{width:100%;max-width:280px;height:auto}
+
+.em-part{cursor:pointer;transition:transform .25s,filter .25s,stroke-width .25s;transform-origin:center}
+.em-part:hover{filter:brightness(1.4) drop-shadow(0 0 4px currentColor)}
+.em-part.em-selected{stroke-width:3.5;filter:brightness(1.6) drop-shadow(0 0 8px currentColor);
+    animation:em-pulse 1.2s ease-in-out infinite alternate}
+@keyframes em-pulse{from{filter:brightness(1.4) drop-shadow(0 0 4px currentColor)}to{filter:brightness(1.8) drop-shadow(0 0 12px currentColor)}}
+
+.em-info-card{margin-top:14px;padding:14px;background:rgba(0,243,255,.04);border:1px solid rgba(0,243,255,.12);
+    border-radius:12px;transition:all .3s ease}
+.em-info-card.em-info-visible{border-color:rgba(0,243,255,.25);background:rgba(0,243,255,.06)}
+.em-info-title{color:var(--primary);font-size:.9rem;font-weight:700;margin-bottom:6px}
+.em-info-text{color:var(--t2);font-size:.78rem;line-height:1.6}
+
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
